@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Höhenmesser</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_hoehencalculator">Höhencalculator</string>
+    <string name="new_calculation">Neue Berechnung</string>
+    <string name="new_angles">Neue Winkel</string>
+    <string name="log">Log</string>
+    <string name="delete">Löschen</string>
+    <string name="clear">Clear Angles</string>
+    <string name="save">Save Angle</string>
+    
+    <string name="alpha">α:</string>
+    <string name="angle">Angle Two:</string>
+    <string name="beta">β:</string>
+    <string name="a">a:</string>
+    <string name="b">b:</string>
+
+    <string name="AlphaDefault">0</string>
+	<string name="aDefault">0</string>
+	<string name="bDefault">0</string>
+	<string name="BetaDefault">0</string>
+	<string name="AngleDefault">0</string>
+    
+</resources>

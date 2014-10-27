@@ -1,0 +1,36 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="ch.delavega_schumacher.schatzkarte.Schatzkarte" >
+
+    
+    <org.osmdroid.views.MapView
+        android:id="@+id/map"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+    
+    <ImageButton
+        android:id="@+id/btnSetMarker"
+        android:contentDescription="@string/LocationSetter"
+        android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"
+    	android:src="@drawable/set_location_icon"
+        />
+
+    <ImageButton
+        android:id="@+id/btnRemoveAllMarkers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/btnSetMarker"
+        android:layout_alignTop="@+id/map"
+        android:layout_toRightOf="@+id/btnSetMarker"
+        android:contentDescription="@string/RemoveAllMarkers"
+        android:src="@drawable/remove_markers_icon" />
+    
+</RelativeLayout>

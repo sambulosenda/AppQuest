@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<!-- App Informationen -->
+    <string name="app_name">Schatzkarte</string>
+   	
+    <!-- Menu -->
+   	<string name="log">log</string>
+   	
+   	<!-- Button Beschriftungen oder Beschreibungen -->
+   	<string name="LocationSetter">set new Marker</string>
+   	<string name="RemoveAllMarkers">remove all Markers</string>
+   	
+   	<!-- Database -->
+   	<string name="dbname">TreasureMap</string>
+  	<string-array name="create_tables">
+    	<item>
+    	  	create table coordinates(
+       			id integer primary key autoincrement,
+        		description text(50) not null,
+        		longitude real(10) not null,
+        		latitude real(10) not null
+      		)
+   		</item>
+  	</string-array>
+  	
+  	<!-- App Data -->
+  	<string name="map_tiles_path">/download/</string>
+  	<string name="map_tiles_file_name">hsr.mbtiles</string>
+  	
+  	<!-- Fehlermeldungen -->
+  	<string name="error_logging_not_possible">The Logging didn\'t work for some reason, please contact the administrator.</string>
+	<string name="error_map_file_not_found">The Map File wasn\'t found</string>
+	<string name="error_map_creating">The application wasn\'t able to create the map. Contact the administrator.</string>
+</resources>

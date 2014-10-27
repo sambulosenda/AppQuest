@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Metalldetektor</string>
+    <string name="action_settings">Settings</string>
+    <string name="Info">Stärke des Magnetfeldes:</string>
+    <string name="title_activity_metall_detector">MetallDetector</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="log">Log</string>
+
+</resources>
