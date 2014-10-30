@@ -138,7 +138,8 @@ public class Schatzkarte extends Activity {
 	{
 		if(currentPlacePerson)
 		{
-			// am derzeitigen Standort setzen
+			Marker marker = new Marker(tempLocation, "");
+			marker.save(this);
 		}
 		else
 		{

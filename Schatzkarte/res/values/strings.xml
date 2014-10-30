@@ -12,16 +12,18 @@
    	
    	<!-- Database -->
    	<string name="dbname">TreasureMap</string>
-  	<string-array name="create_tables">
-    	<item>
+   	<string name="dbversion">1</string>
+    <string name="create_tables">
     	  	create table coordinates(
        			id integer primary key autoincrement,
         		description text(50) not null,
         		longitude real(10) not null,
         		latitude real(10) not null
       		)
-   		</item>
-  	</string-array>
+   	</string>
+  	<string name="drop_tables">
+ 		DROP TABLE IF EXISTS coordinates
+  	</string>
   	
   	<!-- App Data -->
   	<string name="map_tiles_path">/download/</string>

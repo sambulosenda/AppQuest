@@ -8,9 +8,6 @@
 package ch.delavega_schumacher.schatzkarte;
 
 public final class R {
-    public static final class array {
-        public static final int create_tables=0x7f070000;
-    }
     public static final class attr {
     }
     public static final class dimen {
@@ -30,16 +27,16 @@ public final class R {
         public static final int set_location_icon=0x7f020002;
     }
     public static final class id {
-        public static final int btnRemoveAllMarkers=0x7f090002;
-        public static final int btnSetMarker=0x7f090001;
-        public static final int log=0x7f090003;
-        public static final int map=0x7f090000;
+        public static final int btnRemoveAllMarkers=0x7f080002;
+        public static final int btnSetMarker=0x7f080001;
+        public static final int log=0x7f080003;
+        public static final int map=0x7f080000;
     }
     public static final class layout {
         public static final int activity_schatzkarte=0x7f030000;
     }
     public static final class menu {
-        public static final int schatzkarte=0x7f080000;
+        public static final int schatzkarte=0x7f070000;
     }
     public static final class string {
         /**  Button Beschriftungen oder Beschreibungen 
@@ -49,21 +46,24 @@ public final class R {
         /**  App Informationen 
          */
         public static final int app_name=0x7f040000;
+        public static final int create_tables=0x7f040006;
         /**  Database 
          */
         public static final int dbname=0x7f040004;
+        public static final int dbversion=0x7f040005;
+        public static final int drop_tables=0x7f040007;
         /**  Fehlermeldungen 
          */
-        public static final int error_logging_not_possible=0x7f040007;
-        public static final int error_map_creating=0x7f040009;
-        public static final int error_map_file_not_found=0x7f040008;
+        public static final int error_logging_not_possible=0x7f04000a;
+        public static final int error_map_creating=0x7f04000c;
+        public static final int error_map_file_not_found=0x7f04000b;
         /**  Menu 
          */
         public static final int log=0x7f040001;
-        public static final int map_tiles_file_name=0x7f040006;
+        public static final int map_tiles_file_name=0x7f040009;
         /**  App Data 
          */
-        public static final int map_tiles_path=0x7f040005;
+        public static final int map_tiles_path=0x7f040008;
     }
     public static final class style {
         /** 
