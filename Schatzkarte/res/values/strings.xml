@@ -28,9 +28,17 @@
   	<!-- App Data -->
   	<string name="map_tiles_path">/download/</string>
   	<string name="map_tiles_file_name">hsr.mbtiles</string>
+  	<string name="map_data_file_filename">markerfiledata.txt</string>
+  	
+  	<string name="map_default_location_latitute">47.223404</string>
+  	<string name="map_default_location_longitude">8.816911</string>
   	
   	<!-- Fehlermeldungen -->
   	<string name="error_logging_not_possible">The Logging didn\'t work for some reason, please contact the administrator.</string>
 	<string name="error_map_file_not_found">The Map File wasn\'t found</string>
+	<string name="error_file_not_found">The File wasn\'t found</string>
 	<string name="error_map_creating">The application wasn\'t able to create the map. Contact the administrator.</string>
+	<string name="error_gps_not_enabled">The gps receiver isn\'t activated. Please activate it.</string>
+	<string name="error_save_file">Error when trying to save the file!</string>
+	<string name="error_reading_file">Error when trying to read the file!</string>
 </resources>

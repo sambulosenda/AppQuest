@@ -3,6 +3,7 @@
 	<name>Schatzkarte</name>
 	<comment></comment>
 	<projects>
+		<project>AppQuestFunctions</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

@@ -1,7 +1,14 @@
 package ch.delavega_schumacher.schatzkarte;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.json.JSONArray;
+import org.osmdroid.DefaultResourceProxyImpl;
 import org.osmdroid.ResourceProxy;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.tileprovider.MapTileProviderArray;
@@ -15,13 +22,27 @@ import org.osmdroid.tileprovider.tilesource.XYTileSource;
 import org.osmdroid.tileprovider.util.SimpleRegisterReceiver;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
+
+
+import android.content.Context;
+import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
+
+
+import org.osmdroid.views.overlay.ItemizedIconOverlay;
+import org.osmdroid.views.overlay.ItemizedOverlay;
+import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.TilesOverlay;
 
 import ch.delavega_schumacher.appquestfunctions.Logging.Logbook;
 import ch.delavega_schumacher.appquestfunctions.android.Application;
+import ch.delavega_schumacher.schatzkarte.R;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -33,19 +54,31 @@ import android.view.View;
 import android.widget.Button;
 
 
-public class Schatzkarte extends Activity {
+public class Schatzkarte extends Activity implements LocationListener {
 
 	private MapView map;
-	private GeoPoint tempLocation;
+	IMapController controller;
+	private ResourceProxy mResourceProxy;
+	private ItemizedOverlay<OverlayItem> mMyMarkerOverlay;
 
-	private LocationListener locationListener;
+	private GeoPoint tempLocation;
+	private List<Marker> markers;
+
 	private LocationManager locationManager;
-	
+	//private MapDBModel dbModel;
+	private MapFileModel mapModel;
+
 	private static Logbook Log = Logbook.getInstance();
 	private static Application application = Application.getInstance();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_schatzkarte);
+		mResourceProxy = new DefaultResourceProxyImpl(getApplicationContext());
+
+		mapModel = new MapFileModel();
+		markers = new ArrayList<Marker>();
 		try
 		{
 			if(application.doesFileExist(Environment.getExternalStorageDirectory() + getString(R.string.map_tiles_path), getString(R.string.map_tiles_file_name)))
@@ -61,42 +94,60 @@ public class Schatzkarte extends Activity {
 		{
 			application.showErrors(this, getResources().getString(R.string.error_map_creating));
 		}
-		
-		Button btnSetMarker = (Button)findViewById(R.id.btnSetMarker);
+
+		ImageButton btnSetMarker = (ImageButton)findViewById(R.id.btnSetMarker);
 		btnSetMarker.setOnClickListener(new View.OnClickListener() {
-			
+
 			public void onClick(View v) {
 				setMarker(true);
 			}
 		});
-		
-		Button btnRemoveAllMarkers = (Button)findViewById(R.id.btnRemoveAllMarkers);
+
+		ImageButton btnRemoveAllMarkers = (ImageButton)findViewById(R.id.btnRemoveAllMarkers);
 		btnRemoveAllMarkers.setOnClickListener(new View.OnClickListener() {
-			
+
 			public void onClick(View v) { 
-				// löschen aller Marker (eventuell Methode, die nicht sofort alle, sondern auch einzelne löschen kann)
-			}	
+				deleteMarker(true); // delete the current last set marker 
+			}
 		});
-		
-		this.configureLocationListener();
-		
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_schatzkarte);
+
+		this.configureLocationManager();
+
 	}
 
-	public void configureLocationListener()
+	public void onResume()
 	{
-		locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
-		locationListener = getLocationListener();
-		
+		super.onResume();
+
+		mapModel = new MapFileModel();
+		this.configureLocationManager();
+	}
+
+	public void onPause()
+	{
+		super.onPause();
+
+		locationManager.removeUpdates(this);
+		mapModel = new MapFileModel();
+	}
+
+	public void configureLocationManager()
+	{
+		locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+
+		if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) && !locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
+		{
+			application.showErrors(this, getString(R.string.error_gps_not_enabled));			
+		}
+
 		int minimumTime = 0;
 		int minimumDistance = 0;
-		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, minimumTime, minimumDistance, locationListener);
+		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, minimumTime, minimumDistance, (LocationListener) this);
+		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, minimumTime, minimumDistance, (LocationListener) this);
 	}
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.schatzkarte, menu);
 		return true;
 	}
@@ -115,15 +166,33 @@ public class Schatzkarte extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	/* Eigene Funktionen */
+	/* Logging */
+	
 	public void log()
 	{			
 		try
 		{
 			String taskname, logMessage;
-
+			logMessage = "Koordinaten";
 			taskname = "Schatzkarte";
-			logMessage = "Test"; // TODO: erhalten der Koordinaten in unserer Datenbank und umwandeln dieser in JSON - Format
+			
+			if(application.doesFileExist(getFilesDir().toString(), getString(R.string.map_data_file_filename))){
+				markers = mapModel.loadData(this, getString(R.string.map_data_file_filename));
+				
+				if(markers == null)
+				{
+					markers = new ArrayList<Marker>();
+				}
+				
+				JSONArray jsonMarkerList = new JSONArray();
+				
+				for(Marker marker : markers)
+				{
+					jsonMarkerList.put(marker.getJsonObject());
+				}
+				
+				logMessage = jsonMarkerList.toString();
+			}	
 
 			Intent Logger = Log.log(this, taskname, logMessage);
 			startActivity(Logger);
@@ -134,24 +203,44 @@ public class Schatzkarte extends Activity {
 		}
 	}
 
-	public void setMarker(boolean currentPlacePerson)
-	{
-		if(currentPlacePerson)
-		{
-			Marker marker = new Marker(tempLocation, "");
-			marker.save(this);
-		}
-		else
-		{
-			// alternativ an Standort setzen, wo getippt wurde
-
-			// longitude and latitude in der Datenbank eintragen
-		}
-	}
-
 	public void refreshMap()
 	{
 		// alle Marker auf der Karte setzen
+		markers = new ArrayList<Marker>();
+		try {
+			if(application.doesFileExist(getFilesDir().toString(), getString(R.string.map_data_file_filename))){
+				markers = mapModel.loadData(this, getString(R.string.map_data_file_filename));
+				
+				if(markers == null)
+				{
+					markers = new ArrayList<Marker>();
+				}
+				
+				ArrayList<OverlayItem> items = new ArrayList<OverlayItem>();
+
+				for(Marker marker : markers)
+				{
+					items.add(new OverlayItem("", "", marker.getMarkerLocation()));			
+					controller.setCenter(marker.getMarkerLocation());
+				}
+
+				Drawable drwMarker=getResources().getDrawable(R.drawable.marker);
+				int markerWidth = drwMarker.getIntrinsicWidth();
+				int markerHeight = drwMarker.getIntrinsicHeight();
+				drwMarker.setBounds(0, markerHeight, markerWidth, 0);
+
+				this.mMyMarkerOverlay = new ItemizedIconOverlay<OverlayItem>(items, drwMarker, null, mResourceProxy);//(items,
+				map.getOverlays().add(this.mMyMarkerOverlay);
+				map.invalidate();
+			}
+			else
+			{
+				application.showErrors(this, getString(R.string.error_file_not_found));
+			}
+
+		} catch (IOException e) {
+			application.showErrors(this, getString(R.string.error_reading_file));
+		}
 	}
 
 	public void configureMap()
@@ -162,8 +251,12 @@ public class Schatzkarte extends Activity {
 		map.setMultiTouchControls(true);
 		map.setBuiltInZoomControls(true);
 
-		IMapController controller = map.getController();
-		controller.setZoom(18);
+		controller = map.getController();
+		controller.setZoom(22);
+
+		float defaultLatitute = Float.parseFloat (getResources().getString (R.string.map_default_location_latitute));
+		float defaultLongitude = Float.parseFloat (getResources().getString (R.string.map_default_location_longitude));
+		controller.setCenter(new GeoPoint(defaultLatitute, defaultLongitude));
 
 		XYTileSource treasureMapTileSource = new XYTileSource("mbtiles", ResourceProxy.string.offline_mode, 1, 20, 256, ".png", "http://example.org/");
 
@@ -177,33 +270,76 @@ public class Schatzkarte extends Activity {
 
 		TilesOverlay treasureMapTilesOverlay = new TilesOverlay(treasureMapProvider, getBaseContext());
 		treasureMapTilesOverlay.setLoadingBackgroundColor(Color.TRANSPARENT);
-		map.getOverlays().add(treasureMapTilesOverlay);		
+		map.getOverlays().add(treasureMapTilesOverlay);
+		
+		refreshMap();
 	}
 
-	public LocationListener getLocationListener()
+	/* Own Methods (Controls) */
+	
+	public void setMarker(boolean currentPlacePerson)
 	{
-		return new LocationListener() {
+		if(tempLocation != null)
+		{
+			Marker marker = new Marker(tempLocation); 
+			controller.setCenter(tempLocation);
+			markers.add(marker);
 
-			@Override
-			public void onLocationChanged(Location location) {
-				tempLocation = new GeoPoint(location.getLatitude(), location.getLongitude());
-			}
-			
-			public void onProviderDisabled(String provider)
-			{
-				
-			}
+			this.saveFile();
 
-			public void onProviderEnabled(String provider)
-			{
-				
-			}
+		}
+		else
+		{
+			application.showErrors(this, "There is no location to set a marker!");
+		}
 
-			public void onStatusChanged(String prodiver, int status, Bundle extras)
+	}
+
+	private void deleteMarker(boolean lastMarker) {
+		if(lastMarker)
+		{
+			if(markers.size() > 0)
 			{
-				
+				markers.remove(markers.size() - 1);
+
+				this.saveFile();
 			}
-		};
+		}
+
+	}	
+
+	private void saveFile()
+	{
+		try {
+			mapModel.saveFile(this, getString(R.string.map_data_file_filename), (ArrayList)markers);
+			this.configureMap();
+		} catch (IOException e) {
+			application.showErrors(this, getString(R.string.error_save_file));
+		}
+	
+	/* Listener */
+	
+	@Override
+	public void onLocationChanged(Location location) {
+		tempLocation = new GeoPoint(location.getLatitude(), location.getLongitude());
+	}
+
+	@Override
+	public void onProviderDisabled(String provider) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onProviderEnabled(String provider) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onStatusChanged(String provider, int status, Bundle extras) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

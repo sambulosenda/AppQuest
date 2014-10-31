@@ -7,49 +7,43 @@ import org.osmdroid.util.GeoPoint;
 import android.content.Context;
 
 public class Marker {
-	
-	private int id;
+
 	private GeoPoint markerPoint;
-	private String description;
 	
 	/*Konstruktor/en*/
 	
-	public Marker(int id, double latitude, double longitude, String description)	
+	public Marker()
 	{
-		this.markerPoint = new GeoPoint(latitude, longitude);
-		this.description = description;
-		this.id = id;
+		
 	}
-
-	public Marker(GeoPoint markerPoint, String description)
+	
+	public Marker(GeoPoint markerPoint)
 	{
 		this.markerPoint = markerPoint;
-		this.description = description;
 	}
 	
+	public Marker(double latitude, double longitude)	
+	{
+		this.markerPoint = new GeoPoint(latitude, longitude);
+	}
+
 	// Funktion zur Umwandlung eines Markers in ein JSON Object
-	public String getJsonFormat() throws JSONException
+	public JSONObject getJsonObject() throws JSONException
 	{
 		JSONObject jsonMarkerObj = new JSONObject();
-
-		jsonMarkerObj.put("lat:", markerPoint.getLatitudeE6());
-		jsonMarkerObj.put("lon:", markerPoint.getLongitudeE6());
 		
-		return jsonMarkerObj.toString();
+		jsonMarkerObj.put("lon", markerPoint.getLongitudeE6());
+		jsonMarkerObj.put("lat", markerPoint.getLatitudeE6());
+		
+		
+		return jsonMarkerObj;
 	}
-	
-	public void save(Context context) // Save the Marker into the db
-	{
-		MapDBModel dbModel = new MapDBModel(context);
-		dbModel.insert(this);
-	}
-
 	/* Getters and Setters */
-	
-	public int getId() {
-		return id;
-	}
 
+	public GeoPoint getMarkerLocation() {
+		return markerPoint;
+	}
+	
 	public double getLatitude() {
 		return markerPoint.getLatitude();
 	}
@@ -58,7 +52,7 @@ public class Marker {
 		return markerPoint.getLongitude();
 	}
 
-	public String getDescription() {
-		return description;
+	public void setMarkerPoint(double longitude, double latitude) {
+		this.markerPoint = new GeoPoint(latitude, longitude);
 	}
 }

@@ -1,7 +1,5 @@
 package ch.delavega_schumacher.appquestfunctions.Mathematics.Formulas;
 
-import ch.delavega_schumacher.appquestfunctions.android.Application;
-
 public class CalculatingHelper {
 
 private static CalculatingHelper instance = null;
