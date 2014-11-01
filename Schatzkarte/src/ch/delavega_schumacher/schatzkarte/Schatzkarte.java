@@ -67,6 +67,8 @@ public class Schatzkarte extends Activity implements LocationListener {
 	private LocationManager locationManager;
 	//private MapDBModel dbModel;
 	private MapFileModel mapModel;
+	
+	private TextView tvResult;
 
 	private static Logbook Log = Logbook.getInstance();
 	private static Application application = Application.getInstance();
@@ -107,10 +109,12 @@ public class Schatzkarte extends Activity implements LocationListener {
 		btnRemoveAllMarkers.setOnClickListener(new View.OnClickListener() {
 
 			public void onClick(View v) { 
-				deleteMarker(true); // delete the current last set marker 
+				deleteMarker(); // delete the current last set marker 
 			}
 		});
 
+		tvResult = (TextView)findViewById(R.id.tvResult);
+		
 		this.configureLocationManager();
 
 	}
@@ -167,7 +171,7 @@ public class Schatzkarte extends Activity implements LocationListener {
 	}
 
 	/* Logging */
-	
+
 	public void log()
 	{			
 		try
@@ -175,22 +179,22 @@ public class Schatzkarte extends Activity implements LocationListener {
 			String taskname, logMessage;
 			logMessage = "Koordinaten";
 			taskname = "Schatzkarte";
-			
+
 			if(application.doesFileExist(getFilesDir().toString(), getString(R.string.map_data_file_filename))){
 				markers = mapModel.loadData(this, getString(R.string.map_data_file_filename));
-				
+
 				if(markers == null)
 				{
 					markers = new ArrayList<Marker>();
 				}
-				
+
 				JSONArray jsonMarkerList = new JSONArray();
-				
+
 				for(Marker marker : markers)
 				{
 					jsonMarkerList.put(marker.getJsonObject());
 				}
-				
+
 				logMessage = jsonMarkerList.toString();
 			}	
 
@@ -210,12 +214,12 @@ public class Schatzkarte extends Activity implements LocationListener {
 		try {
 			if(application.doesFileExist(getFilesDir().toString(), getString(R.string.map_data_file_filename))){
 				markers = mapModel.loadData(this, getString(R.string.map_data_file_filename));
-				
+
 				if(markers == null)
 				{
 					markers = new ArrayList<Marker>();
 				}
-				
+
 				ArrayList<OverlayItem> items = new ArrayList<OverlayItem>();
 
 				for(Marker marker : markers)
@@ -246,6 +250,7 @@ public class Schatzkarte extends Activity implements LocationListener {
 	public void configureMap()
 	{
 		map = (MapView) findViewById(R.id.map);
+		map.getOverlays().clear();
 		map.setTileSource(TileSourceFactory.MAPQUESTOSM);
 
 		map.setMultiTouchControls(true);
@@ -271,12 +276,12 @@ public class Schatzkarte extends Activity implements LocationListener {
 		TilesOverlay treasureMapTilesOverlay = new TilesOverlay(treasureMapProvider, getBaseContext());
 		treasureMapTilesOverlay.setLoadingBackgroundColor(Color.TRANSPARENT);
 		map.getOverlays().add(treasureMapTilesOverlay);
-		
+
 		refreshMap();
 	}
 
 	/* Own Methods (Controls) */
-	
+
 	public void setMarker(boolean currentPlacePerson)
 	{
 		if(tempLocation != null)
@@ -284,7 +289,9 @@ public class Schatzkarte extends Activity implements LocationListener {
 			Marker marker = new Marker(tempLocation); 
 			controller.setCenter(tempLocation);
 			markers.add(marker);
-
+			
+			tvResult.setText("Erfolgreich Marker gesetzt!");
+			
 			this.saveFile();
 
 		}
@@ -295,17 +302,18 @@ public class Schatzkarte extends Activity implements LocationListener {
 
 	}
 
-	private void deleteMarker(boolean lastMarker) {
-		if(lastMarker)
+	private void deleteMarker() {
+		if(markers.size() > 0)
 		{
-			if(markers.size() > 0)
-			{
-				markers.remove(markers.size() - 1);
-
-				this.saveFile();
-			}
+			markers.remove(markers.size() - 1);
+			tvResult.setText("Marker erfolgreich gelöscht!");
+			
+			this.saveFile();
 		}
-
+		else
+		{
+			application.showErrors(this, getString(R.string.error_no_markers));
+		}
 	}	
 
 	private void saveFile()
@@ -316,9 +324,10 @@ public class Schatzkarte extends Activity implements LocationListener {
 		} catch (IOException e) {
 			application.showErrors(this, getString(R.string.error_save_file));
 		}
-	
+	}
+
 	/* Listener */
-	
+
 	@Override
 	public void onLocationChanged(Location location) {
 		tempLocation = new GeoPoint(location.getLatitude(), location.getLongitude());

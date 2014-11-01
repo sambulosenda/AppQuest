@@ -6,8 +6,9 @@ int drawable remove_markers_icon 0x7f020002
 int drawable set_location_icon 0x7f020003
 int id btnRemoveAllMarkers 0x7f080002
 int id btnSetMarker 0x7f080001
-int id log 0x7f080003
+int id log 0x7f080004
 int id map 0x7f080000
+int id tvResult 0x7f080003
 int layout activity_schatzkarte 0x7f030000
 int menu schatzkarte 0x7f070000
 int string LocationSetter 0x7f040002
@@ -22,6 +23,7 @@ int string error_gps_not_enabled 0x7f040011
 int string error_logging_not_possible 0x7f04000d
 int string error_map_creating 0x7f040010
 int string error_map_file_not_found 0x7f04000e
+int string error_no_markers 0x7f040014
 int string error_reading_file 0x7f040013
 int string error_save_file 0x7f040012
 int string log 0x7f040001

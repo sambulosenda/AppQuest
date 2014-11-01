@@ -32,5 +32,14 @@
         android:layout_toRightOf="@+id/btnSetMarker"
         android:contentDescription="@string/RemoveAllMarkers"
         android:src="@drawable/remove_markers_icon" />
+
+    <TextView
+        android:id="@+id/tvResult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/map"
+        android:layout_alignLeft="@+id/map"
+        android:layout_alignRight="@+id/map"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
     
 </RelativeLayout>

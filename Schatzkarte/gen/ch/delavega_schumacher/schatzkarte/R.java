@@ -30,8 +30,9 @@ public final class R {
     public static final class id {
         public static final int btnRemoveAllMarkers=0x7f080002;
         public static final int btnSetMarker=0x7f080001;
-        public static final int log=0x7f080003;
+        public static final int log=0x7f080004;
         public static final int map=0x7f080000;
+        public static final int tvResult=0x7f080003;
     }
     public static final class layout {
         public static final int activity_schatzkarte=0x7f030000;
@@ -60,6 +61,7 @@ public final class R {
         public static final int error_logging_not_possible=0x7f04000d;
         public static final int error_map_creating=0x7f040010;
         public static final int error_map_file_not_found=0x7f04000e;
+        public static final int error_no_markers=0x7f040014;
         public static final int error_reading_file=0x7f040013;
         public static final int error_save_file=0x7f040012;
         /**  Menu 

@@ -41,4 +41,5 @@
 	<string name="error_gps_not_enabled">The gps receiver isn\'t activated. Please activate it.</string>
 	<string name="error_save_file">Error when trying to save the file!</string>
 	<string name="error_reading_file">Error when trying to read the file!</string>
+	<string name="error_no_markers">No markers to delete left!</string>
 </resources>
