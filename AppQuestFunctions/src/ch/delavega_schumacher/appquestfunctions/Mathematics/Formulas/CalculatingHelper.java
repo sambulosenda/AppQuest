@@ -17,7 +17,7 @@ private static CalculatingHelper instance = null;
 	      return instance;
 	}
 	
-	public double getMagnetField(float[] sensorData)
+	public double getVector(float[] sensorData)
 	{
 		double result = Math.sqrt(sensorData[0] * sensorData[0] 
 				+ 	sensorData[1] * sensorData[1]

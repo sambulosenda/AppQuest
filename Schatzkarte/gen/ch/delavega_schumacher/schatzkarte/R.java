@@ -48,32 +48,26 @@ public final class R {
         /**  App Informationen 
          */
         public static final int app_name=0x7f040000;
-        public static final int create_tables=0x7f040006;
-        /**  Database 
-         */
-        public static final int dbname=0x7f040004;
-        public static final int dbversion=0x7f040005;
-        public static final int drop_tables=0x7f040007;
-        public static final int error_file_not_found=0x7f04000f;
-        public static final int error_gps_not_enabled=0x7f040011;
+        public static final int error_file_not_found=0x7f04000b;
+        public static final int error_gps_not_enabled=0x7f04000d;
         /**  Fehlermeldungen 
          */
-        public static final int error_logging_not_possible=0x7f04000d;
-        public static final int error_map_creating=0x7f040010;
-        public static final int error_map_file_not_found=0x7f04000e;
-        public static final int error_no_markers=0x7f040014;
-        public static final int error_reading_file=0x7f040013;
-        public static final int error_save_file=0x7f040012;
+        public static final int error_logging_not_possible=0x7f040009;
+        public static final int error_map_creating=0x7f04000c;
+        public static final int error_map_file_not_found=0x7f04000a;
+        public static final int error_no_markers=0x7f040010;
+        public static final int error_reading_file=0x7f04000f;
+        public static final int error_save_file=0x7f04000e;
         /**  Menu 
          */
         public static final int log=0x7f040001;
-        public static final int map_data_file_filename=0x7f04000a;
-        public static final int map_default_location_latitute=0x7f04000b;
-        public static final int map_default_location_longitude=0x7f04000c;
-        public static final int map_tiles_file_name=0x7f040009;
+        public static final int map_data_file_filename=0x7f040006;
+        public static final int map_default_location_latitute=0x7f040007;
+        public static final int map_default_location_longitude=0x7f040008;
+        public static final int map_tiles_file_name=0x7f040005;
         /**  App Data 
          */
-        public static final int map_tiles_path=0x7f040008;
+        public static final int map_tiles_path=0x7f040004;
     }
     public static final class style {
         /** 

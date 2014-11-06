@@ -165,8 +165,6 @@ public class Schatzkarte extends Activity implements LocationListener {
 		break;
 		}
 
-
-
 		return super.onOptionsItemSelected(item);
 	}
 

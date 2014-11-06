@@ -138,7 +138,7 @@ public class Metalldetektor extends Activity implements SensorEventListener{
 	public void onSensorChanged(SensorEvent metallEvent) {
 		
 		float[] sensorValues = metallEvent.values;
-		double metall_field = calcHelper.getMagnetField(sensorValues);
+		double metall_field = calcHelper.getVector(sensorValues);
 		
 		updateView(metall_field);
 	}
