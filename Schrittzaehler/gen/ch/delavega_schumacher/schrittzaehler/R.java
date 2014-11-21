@@ -42,24 +42,27 @@ public final class R {
     }
     public static final class string {
         public static final int app_name=0x7f040000;
-        public static final int error_counting_steps_not_possible=0x7f04000b;
+        public static final int error_counting_steps_not_possible=0x7f04000c;
         /**  Errors 
          */
-        public static final int error_logging_not_possible=0x7f040009;
-        public static final int error_refreshing_gui_not_possible=0x7f04000a;
-        public static final int error_speaking_not_possible=0x7f04000c;
+        public static final int error_logging_not_possible=0x7f04000a;
+        public static final int error_refreshing_gui_not_possible=0x7f04000b;
+        public static final int error_speaking_not_possible=0x7f04000d;
         /**  Menu 
          */
         public static final int log=0x7f040001;
+        public static final int response_finished=0x7f040009;
+        /**  Responses 
+         */
+        public static final int response_start=0x7f040008;
         public static final int restart=0x7f040003;
         public static final int scan=0x7f040002;
+        public static final int txtIContentDescription=0x7f040007;
+        public static final int txtStart=0x7f040005;
         /**  Controls 
          */
-        public static final int txtCommand=0x7f040004;
-        public static final int txtIContentDescription=0x7f040008;
-        public static final int txtStart=0x7f040006;
-        public static final int txtSteps=0x7f040005;
-        public static final int txtStop=0x7f040007;
+        public static final int txtSteps=0x7f040004;
+        public static final int txtStop=0x7f040006;
     }
     public static final class style {
         /** 

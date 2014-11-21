@@ -16,8 +16,8 @@ import android.hardware.SensorManager;
 import ch.delavega_schumacher.appquestfunctions.Logging.Logbook;
 import ch.delavega_schumacher.appquestfunctions.android.Application;
 import ch.delavega_schumacher.schrittzaehler.R;
-import ch.delvega_schumacher.appquestfunctions.android.stepcounter.StepCounter;
-import ch.delvega_schumacher.appquestfunctions.android.stepcounter.StepListener;
+import ch.delavega_schumacher.appquestfunctions.android.stepcounter.StepCounter;
+import ch.delavega_schumacher.appquestfunctions.android.stepcounter.StepListener;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.view.Menu;
@@ -28,6 +28,11 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+/**
+ * Hauptactivity: zählt Schritte, fordert zum Drehen auf und implementiert die Onstep - Funktion, mit der es möglich ist, auf gegangene Schritte zu reagieren
+ * @author Snatsch
+ *
+ */
 public class Schrittzaehler extends Activity implements StepListener {
 
 	public SensorEventListener stepCounter;
@@ -88,6 +93,8 @@ public class Schrittzaehler extends Activity implements StepListener {
 			startActivityForResult(stationScanner, SCAN_QR_CODE_REQUEST_CODE);
 		break;
 		case(R.id.restart):
+			// Start - und Endstation zurücksetzen
+			this.restart();
 			break;
 		}
 
@@ -134,6 +141,15 @@ public class Schrittzaehler extends Activity implements StepListener {
 	}
 
 	/* eigene Funktionen*/
+	public void restart()
+	{
+		tvCommands.setText(getString(R.string.response_start));
+		tvSteps.setText(getString(R.string.txtSteps));
+		imgDirection.setVisibility(View.INVISIBLE);
+		endstation = 0;
+		startstation = 0;
+	}
+	
 	public void setStepCounter()
 	{
 		mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -168,7 +184,7 @@ public class Schrittzaehler extends Activity implements StepListener {
 			else
 			{
 				talkDirtyToMe(String.valueOf(mStepManager.getStepsLeft()));
-				tvSteps.setText("0 steps left");
+				tvSteps.setText(getString(R.string.txtSteps));
 			}
 
 			if(mStepManager.isAboutToTurn())
@@ -195,7 +211,7 @@ public class Schrittzaehler extends Activity implements StepListener {
 
 			if(mStepManager.isTourFinished())
 			{
-				tvCommands.setText("You've finished your tour. Scan the endstation-QRCode");
+				tvCommands.setText(getString(R.string.response_finished));
 			}
 		}
 		catch(Exception ex)

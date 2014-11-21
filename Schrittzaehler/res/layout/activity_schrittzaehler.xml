@@ -16,7 +16,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginLeft="17dp"
         android:layout_marginTop="16dp"
-        android:text="@string/txtCommand"
+        android:text="@string/response_start"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
    	   	<TextView

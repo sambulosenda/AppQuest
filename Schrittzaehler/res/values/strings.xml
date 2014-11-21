@@ -9,12 +9,15 @@
     <string name="restart">restart</string>
 
     <!-- Controls -->
-    <string name="txtCommand">Please scan further instructions</string>
     <string name="txtSteps">0 Steps left</string>
     <string name="txtStart">Start</string>
     <string name="txtStop">Stop</string>
     
     <string name="txtIContentDescription">Image Turning Direction</string>
+    
+    <!-- Responses -->
+    <string name="response_start">Please scan further instructions</string>
+    <string name="response_finished">You\'ve finished your tour. Scan the endstation-QRCode</string>
     
     <!-- Errors -->
     <string name="error_logging_not_possible">The Logging didn\'t work for some reason, please contact the administrator.</string>

@@ -102,7 +102,6 @@ public class StepManager {
 			{
 				this.setNextInstructions();
 			}
-			talkToMe(tempStepsLeft + " steps left");
 			return true;
 		}
 		return false;
@@ -112,7 +111,6 @@ public class StepManager {
 	{
 		if(tempTurnDirection != "")
 		{
-			talkToMe("You've turned " + tempTurnDirection);
 			tempTurnDirection = "";
 			this.setNextInstructions();
 			return true;
@@ -124,16 +122,10 @@ public class StepManager {
 	{
 		if(leftStepInstructions.length() == 0 && tempStepsLeft == 0 && isAboutToTurn() == false)
 		{
-			talkToMe("You've reached the endstation.");
 			return true;
 		}
 		
 		return false;
-	}
-	
-	public void talkToMe(String text)
-	{
-		// text to speech
 	}
 
 }
