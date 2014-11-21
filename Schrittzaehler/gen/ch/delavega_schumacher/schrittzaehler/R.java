@@ -27,10 +27,11 @@ public final class R {
     public static final class id {
         public static final int btnStart=0x7f080002;
         public static final int btnStop=0x7f080001;
-        public static final int log=0x7f080004;
-        public static final int scan=0x7f080005;
+        public static final int log=0x7f080005;
+        public static final int scan=0x7f080006;
         public static final int tvCommands=0x7f080000;
         public static final int tvSteps=0x7f080003;
+        public static final int tvTest=0x7f080004;
     }
     public static final class layout {
         public static final int activity_schrittzaehler=0x7f030000;
@@ -40,14 +41,17 @@ public final class R {
     }
     public static final class string {
         public static final int app_name=0x7f040000;
+        public static final int error_counting_steps_not_possible=0x7f04000a;
         /**  Errors 
          */
-        public static final int error_logging_not_possible=0x7f040007;
+        public static final int error_logging_not_possible=0x7f040008;
+        public static final int error_refreshing_gui_not_possible=0x7f040009;
         public static final int log=0x7f040001;
         public static final int scan=0x7f040002;
         /**  Controls 
          */
         public static final int txtCommand=0x7f040003;
+        public static final int txtInstructionsTest=0x7f040007;
         public static final int txtStart=0x7f040005;
         public static final int txtSteps=0x7f040004;
         public static final int txtStop=0x7f040006;

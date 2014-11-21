@@ -9,14 +9,19 @@ public class StepManager {
 	private JSONArray leftStepInstructions;
 
 	private int tempStepsLeft = 0;
-	private String tempTurnDirection;
+	private String tempTurnDirection = "";
 
 	public StepManager(JSONArray instructions)
 	{
 		this.allStepInstructions = instructions;
 		this.leftStepInstructions = instructions;
 	}
-
+	
+	public JSONArray getleftStepInstructions()
+	{
+		return leftStepInstructions;
+	}
+		
 	public void setNextInstructions() throws JSONException
 	{
 		if(leftStepInstructions.length() > 0)
@@ -24,12 +29,12 @@ public class StepManager {
 			try
 			{
 				// Parsing => sollte es nicht klappen, dann war es eine Drehanweisung und keine Laufanweisung
-				int tempStepsLeft = Integer.parseInt(String.valueOf(leftStepInstructions.get(0)));
+				int tempStepsLeft = leftStepInstructions.getInt(0);
 				this.tempStepsLeft = tempStepsLeft;
 			}
 			catch(Exception ex)
 			{
-				String tempTurnDirection = String.valueOf(leftStepInstructions.get(0));
+				String tempTurnDirection = leftStepInstructions.getString(0);
 				this.tempTurnDirection = tempTurnDirection;
 			}
 
@@ -57,6 +62,11 @@ public class StepManager {
 	{
 		return tempStepsLeft;
 	}
+	
+	public boolean hasStepsLeft()
+	{
+		return tempStepsLeft > 0;
+	}
 
 	public boolean isAboutToTurn()
 	{
@@ -68,7 +78,12 @@ public class StepManager {
 		if(tempStepsLeft > 0)
 		{
 			tempStepsLeft--;
-			this.setNextInstructions();
+			
+			if(tempStepsLeft == 0)
+			{
+				this.setNextInstructions();
+			}
+			talkToMe(tempStepsLeft + " steps left");
 			return true;
 		}
 		return false;
@@ -78,6 +93,7 @@ public class StepManager {
 	{
 		if(tempTurnDirection != "")
 		{
+			talkToMe("You've turned " + tempTurnDirection);
 			tempTurnDirection = "";
 			this.setNextInstructions();
 			return true;
@@ -87,7 +103,18 @@ public class StepManager {
 
 	public boolean isTourFinished()
 	{
-		return leftStepInstructions.length() == 0;
+		if(leftStepInstructions.length() == 0)
+		{
+			talkToMe("You've reached the endstation.");
+			return true;
+		}
+		
+		return false;
+	}
+	
+	public void talkToMe(String text)
+	{
+		// text to speech
 	}
 
 }

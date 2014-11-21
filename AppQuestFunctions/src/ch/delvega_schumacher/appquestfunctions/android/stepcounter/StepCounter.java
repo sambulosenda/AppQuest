@@ -25,13 +25,6 @@ public class StepCounter implements SensorEventListener {
 	}
 
 	public void onSensorChanged(SensorEvent event) {
-		
-		/*float x = event.values[0];
-		float y = event.values[1];
-		float z = event.values[2];
-		
-		float magnitude = (float) (Math.pow(x, 2) + Math.pow(y, 2) + Math.pow(z, 2));
-		*/
 		float magnitude = (float) calcHelper.getVector(event.values);
 
 		shortBuffer.put(magnitude);
