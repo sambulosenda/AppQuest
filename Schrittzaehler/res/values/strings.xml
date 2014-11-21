@@ -2,8 +2,11 @@
 <resources>
 
     <string name="app_name">Schrittzaehler</string>
+    
+    <!-- Menu -->
     <string name="log">Log</string>
     <string name="scan">scan instructions</string>
+    <string name="restart">restart</string>
 
     <!-- Controls -->
     <string name="txtCommand">Please scan further instructions</string>
@@ -11,10 +14,11 @@
     <string name="txtStart">Start</string>
     <string name="txtStop">Stop</string>
     
-    <string name="txtInstructionsTest">Test</string>
+    <string name="txtIContentDescription">Image Turning Direction</string>
     
     <!-- Errors -->
     <string name="error_logging_not_possible">The Logging didn\'t work for some reason, please contact the administrator.</string>
     <string name="error_refreshing_gui_not_possible">It wasn\'t possible to refresh the Gui. Please contact the administrator.</string>
     <string name="error_counting_steps_not_possible">It wasn\'t possible to count the steps. Please contact the administrator.</string>
+	<string name="error_speaking_not_possible">It wasn\'t possible to use texttospeech. Please contact the administrator.</string>
 </resources>

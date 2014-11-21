@@ -3,6 +3,8 @@ package ch.delavega_schumacher.schrittzaehler;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import android.speech.tts.TextToSpeech;
+
 public class StepManager {
 
 	private JSONArray allStepInstructions; // für den Fall, dass es nochmals benotwendigt wird (Statistik oder dergleichen)
@@ -10,6 +12,7 @@ public class StepManager {
 
 	private int tempStepsLeft = 0;
 	private String tempTurnDirection = "";
+	private TextToSpeech ttsstepspeaker;
 
 	public StepManager(JSONArray instructions)
 	{
@@ -72,6 +75,22 @@ public class StepManager {
 	{
 		return tempTurnDirection != "";
 	}
+	
+	public String getTurningDirection()
+	{
+		String tempTurnDirectionE = "";
+		
+		if(tempTurnDirection.equals("links"))
+		{
+			tempTurnDirectionE = "left";
+		}
+		else
+		{
+			tempTurnDirectionE = "right";
+		}
+		
+		return tempTurnDirectionE;
+	}
 
 	public boolean makeStep() throws JSONException
 	{
@@ -103,7 +122,7 @@ public class StepManager {
 
 	public boolean isTourFinished()
 	{
-		if(leftStepInstructions.length() == 0)
+		if(leftStepInstructions.length() == 0 && tempStepsLeft == 0 && isAboutToTurn() == false)
 		{
 			talkToMe("You've reached the endstation.");
 			return true;

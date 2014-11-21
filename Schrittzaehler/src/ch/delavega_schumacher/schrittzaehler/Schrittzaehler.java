@@ -1,6 +1,7 @@
 package ch.delavega_schumacher.schrittzaehler;
 
 import java.util.Iterator;
+import java.util.Locale;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -8,6 +9,7 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
@@ -17,11 +19,13 @@ import ch.delavega_schumacher.schrittzaehler.R;
 import ch.delvega_schumacher.appquestfunctions.android.stepcounter.StepCounter;
 import ch.delvega_schumacher.appquestfunctions.android.stepcounter.StepListener;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class Schrittzaehler extends Activity implements StepListener {
@@ -32,8 +36,11 @@ public class Schrittzaehler extends Activity implements StepListener {
 	public Sensor mAccelerometer;
 
 	public TextView tvCommands, tvSteps;
+	public ImageView imgDirection;
 
 	public boolean isWalkingOnGoing = false;
+
+	private TextToSpeech ttsstepspeaker;
 
 	public Application application = Application.getInstance();
 	public Logbook Log = Logbook.getInstance();
@@ -56,16 +63,10 @@ public class Schrittzaehler extends Activity implements StepListener {
 
 		tvCommands = (TextView)findViewById(R.id.tvCommands);
 		tvSteps = (TextView)findViewById(R.id.tvSteps);
+		imgDirection = (ImageView)findViewById(R.id.ivDirection);
+		imgDirection.setVisibility(View.INVISIBLE);
 
-		Button btnStart = (Button)findViewById(R.id.btnStart);
-		btnStart.setOnClickListener(new View.OnClickListener() {
-
-			public void onClick(View v) {
-				setStepCounter();
-			}
-		});
-
-		Button btnStop = (Button)findViewById(R.id.btnStop);
+		setSpeaker();
 	}
 
 	@Override
@@ -84,8 +85,10 @@ public class Schrittzaehler extends Activity implements StepListener {
 		break;
 		case(R.id.scan):
 			Intent stationScanner = Log.scan(this); 
-		startActivityForResult(stationScanner, SCAN_QR_CODE_REQUEST_CODE);
+			startActivityForResult(stationScanner, SCAN_QR_CODE_REQUEST_CODE);
 		break;
+		case(R.id.restart):
+			break;
 		}
 
 		return super.onOptionsItemSelected(item);
@@ -105,7 +108,7 @@ public class Schrittzaehler extends Activity implements StepListener {
 			}
 		}
 	}
-	
+
 	public void onResume()
 	{
 		super.onResume();
@@ -113,12 +116,20 @@ public class Schrittzaehler extends Activity implements StepListener {
 		if(isWalkingOnGoing)
 		{
 			setStepCounter();
+			setSpeaker();
+			try {
+				setGui();
+			} catch (JSONException e) {
+
+			}
 		}
 	}
 
 	public void onPause()
 	{
 		super.onPause();
+
+		unsetSpeaker();
 		unsetStepCounter();
 	}
 
@@ -128,33 +139,60 @@ public class Schrittzaehler extends Activity implements StepListener {
 		mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 		mSensorManager.registerListener(stepCounter, mAccelerometer, SensorManager.SENSOR_DELAY_FASTEST);
 	}
-	
+
 	public void unsetStepCounter()
 	{
 		mSensorManager.unregisterListener(stepCounter); 
 		mAccelerometer = null;
 	}
-	
+
 	public void setGui() throws JSONException
 	{
 		try
 		{
+			isWalkingOnGoing = false;
+			imgDirection.setVisibility(View.INVISIBLE);
 			if(mStepManager.isTourFinished() == false && mStepManager.isAboutToTurn() == false && mStepManager.hasStepsLeft() == false) // der StepManager hat zwar noch Instructions, wurde aber noch nicht initialisiert
 			{
 				mStepManager.setNextInstructions();
-			}
-
-			if(mStepManager.isAboutToTurn())
-			{
-				tvCommands.setText("please turn");
+				isWalkingOnGoing = true;
 			}
 
 			if(mStepManager.hasStepsLeft())
 			{
 				tvCommands.setText("make your steps");
 				tvSteps.setText(mStepManager.getStepsLeft() + " steps left");
+				isWalkingOnGoing = true;
+				talkDirtyToMe(String.valueOf(mStepManager.getStepsLeft()));
 			}
-			
+			else
+			{
+				talkDirtyToMe(String.valueOf(mStepManager.getStepsLeft()));
+				tvSteps.setText("0 steps left");
+			}
+
+			if(mStepManager.isAboutToTurn())
+			{
+				isWalkingOnGoing = true;
+				imgDirection.setVisibility(View.VISIBLE);
+				talkDirtyToMe("turn " + mStepManager.getTurningDirection());
+
+				Drawable arrow;
+
+				if(mStepManager.getTurningDirection().equals("left"))
+				{
+					arrow = getResources().getDrawable(R.drawable.arrow_left);
+				}
+				else
+				{
+					arrow = getResources().getDrawable(R.drawable.arrow_right);
+				}
+
+				imgDirection.setImageDrawable(arrow);
+
+				tvCommands.setText("please turn");
+			}
+
 			if(mStepManager.isTourFinished())
 			{
 				tvCommands.setText("You've finished your tour. Scan the endstation-QRCode");
@@ -196,13 +234,47 @@ public class Schrittzaehler extends Activity implements StepListener {
 		{
 			startstation = Integer.parseInt(stationObject.getString("startStation"));
 			instructions = stationObject.getJSONArray("input");
-			
+
 			mStepManager = new StepManager(instructions);
 		}
 		else
 		{
 			endstation = Integer.parseInt(stationObject.getString("endStation"));
 		}	
+	}
+
+	public void setSpeaker()
+	{
+		ttsstepspeaker=new TextToSpeech(getApplicationContext(), 
+				new TextToSpeech.OnInitListener() {
+			@Override
+			public void onInit(int status) {
+				if(status != TextToSpeech.ERROR){
+					ttsstepspeaker.setLanguage(Locale.UK);
+				}				
+			}
+		});
+	}
+
+	public void unsetSpeaker()
+	{
+		if(ttsstepspeaker !=null){
+			ttsstepspeaker.stop();
+			ttsstepspeaker.shutdown();
+		}
+	}
+
+	// "Talk dirty" - Jason Derulo: http://www.youtube.com/watch?v=RbtPXFlZlHg <= viel Spass :)
+	public void talkDirtyToMe(String textToSpeak)
+	{
+		try
+		{
+			ttsstepspeaker.speak(textToSpeak, TextToSpeech.QUEUE_FLUSH, null);
+		}
+		catch(Exception ex)
+		{
+			application.showErrors(this, getString(R.string.error_speaking_not_possible));
+		}
 	}
 
 	/* implemented Listener Functions => some functions are only-used for the StepCounter */
@@ -218,16 +290,16 @@ public class Schrittzaehler extends Activity implements StepListener {
 			{
 				mStepManager.makeStep();
 			}
-				
+
 			setGui();
-				
+
 			if(mStepManager.isTourFinished())
 			{
 				unsetStepCounter();
 			}
-			
+
 		} catch (JSONException e) {
-			
+			application.showErrors(this, getString(R.string.error_counting_steps_not_possible));
 		}
 	}
 }

@@ -19,43 +19,24 @@
         android:text="@string/txtCommand"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
-   	   	<Button
-   	   	    android:id="@+id/btnStop"
-   	   	    android:layout_width="wrap_content"
-   	   	    android:layout_height="wrap_content"
-   	   	    android:layout_alignParentBottom="true"
-   	   	    android:layout_alignRight="@+id/tvCommands"
-   	   	    android:layout_marginBottom="32dp"
-   	   	    android:text="@string/txtStop" />
-
-   	   	<Button
-   	   	    android:id="@+id/btnStart"
-   	   	    android:layout_width="wrap_content"
-   	   	    android:layout_height="wrap_content"
-   	   	    android:layout_alignBaseline="@+id/btnStop"
-   	   	    android:layout_alignBottom="@+id/btnStop"
-   	   	    android:layout_alignLeft="@+id/tvCommands"
-   	   	    android:text="@string/txtStart" />
-
    	   	<TextView
    	   	    android:id="@+id/tvSteps"
    	   	    android:layout_width="wrap_content"
    	   	    android:layout_height="wrap_content"
-   	   	    android:layout_above="@+id/btnStart"
+   	   	    android:layout_alignParentBottom="true"
    	   	    android:layout_centerHorizontal="true"
-   	   	    android:layout_marginBottom="68dp"
+   	   	    android:layout_marginBottom="80dp"
    	   	    android:text="@string/txtSteps"
    	   	    android:textAppearance="?android:attr/textAppearanceLarge" />
 
-   	   	<TextView
-   	   	    android:id="@+id/tvTest"
+   	   	<ImageView
+   	   	    android:id="@+id/ivDirection"
    	   	    android:layout_width="wrap_content"
    	   	    android:layout_height="wrap_content"
-   	   	    android:layout_alignLeft="@+id/tvCommands"
-   	   	    android:layout_alignRight="@+id/tvCommands"
    	   	    android:layout_below="@+id/tvCommands"
-   	   	    android:layout_marginTop="35dp"
-   	   	    android:text="@string/txtInstructionsTest"
-   	   	    android:textAppearance="?android:attr/textAppearanceMedium" />
+   	   	    android:layout_centerHorizontal="true"
+   	   	    android:layout_marginTop="96dp"
+   	   	    android:contentDescription="@string/txtIContentDescription"
+   	   	    android:src="@drawable/arrow_left" />
 
 </RelativeLayout>
