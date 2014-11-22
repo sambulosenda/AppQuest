@@ -12,10 +12,11 @@ int id tvSteps 0x7f080001
 int layout activity_schrittzaehler 0x7f030000
 int menu schrittzaehler 0x7f070000
 int string app_name 0x7f040000
-int string error_counting_steps_not_possible 0x7f04000c
-int string error_logging_not_possible 0x7f04000a
-int string error_refreshing_gui_not_possible 0x7f04000b
-int string error_speaking_not_possible 0x7f04000d
+int string command_walk 0x7f04000a
+int string error_counting_steps_not_possible 0x7f04000d
+int string error_logging_not_possible 0x7f04000b
+int string error_refreshing_gui_not_possible 0x7f04000c
+int string error_speaking_not_possible 0x7f04000e
 int string log 0x7f040001
 int string response_finished 0x7f040009
 int string response_start 0x7f040008

@@ -93,7 +93,6 @@ public class Schrittzaehler extends Activity implements StepListener {
 			startActivityForResult(stationScanner, SCAN_QR_CODE_REQUEST_CODE);
 		break;
 		case(R.id.restart):
-			// Start - und Endstation zurücksetzen
 			this.restart();
 			break;
 		}
@@ -122,8 +121,8 @@ public class Schrittzaehler extends Activity implements StepListener {
 
 		if(isWalkingOnGoing)
 		{
-			setStepCounter();
 			setSpeaker();
+			setStepCounter();
 			try {
 				setGui();
 			} catch (JSONException e) {
@@ -168,17 +167,21 @@ public class Schrittzaehler extends Activity implements StepListener {
 		try
 		{
 			isWalkingOnGoing = false;
+			boolean firstRound = false;
+			
 			imgDirection.setVisibility(View.INVISIBLE);
 			if(mStepManager.isTourFinished() == false && mStepManager.isAboutToTurn() == false && mStepManager.hasStepsLeft() == false) // der StepManager hat zwar noch Instructions, wurde aber noch nicht initialisiert
 			{
+				firstRound = true;
 				mStepManager.setNextInstructions();
 				isWalkingOnGoing = true;
 			}
 
 			if(mStepManager.hasStepsLeft())
 			{
-				tvCommands.setText("make your steps");
+				tvCommands.setText(getString(R.string.command_walk));
 				tvSteps.setText(mStepManager.getStepsLeft() + " steps left");
+				talkDirtyToMe(String.valueOf(mStepManager.getStepsLeft())); // Zwischenmeldungen etwas unpraktisch, da Wiederholung, wenn neue Anzahl Schritte begonnen wird
 				isWalkingOnGoing = true;
 			}
 			else
@@ -284,7 +287,7 @@ public class Schrittzaehler extends Activity implements StepListener {
 	{
 		try
 		{
-			ttsstepspeaker.speak(textToSpeak, TextToSpeech.QUEUE_FLUSH, null);
+			ttsstepspeaker.speak(textToSpeak, TextToSpeech.QUEUE_ADD, null);
 		}
 		catch(Exception ex)
 		{

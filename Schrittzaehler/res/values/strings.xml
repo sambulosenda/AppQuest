@@ -19,6 +19,9 @@
     <string name="response_start">Please scan further instructions</string>
     <string name="response_finished">You\'ve finished your tour. Scan the endstation-QRCode</string>
     
+    <!-- Command -->
+    <string name="command_walk">Make the amount of steps that are written below</string>
+    
     <!-- Errors -->
     <string name="error_logging_not_possible">The Logging didn\'t work for some reason, please contact the administrator.</string>
     <string name="error_refreshing_gui_not_possible">It wasn\'t possible to refresh the Gui. Please contact the administrator.</string>

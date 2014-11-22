@@ -42,12 +42,15 @@ public final class R {
     }
     public static final class string {
         public static final int app_name=0x7f040000;
-        public static final int error_counting_steps_not_possible=0x7f04000c;
+        /**  Command 
+         */
+        public static final int command_walk=0x7f04000a;
+        public static final int error_counting_steps_not_possible=0x7f04000d;
         /**  Errors 
          */
-        public static final int error_logging_not_possible=0x7f04000a;
-        public static final int error_refreshing_gui_not_possible=0x7f04000b;
-        public static final int error_speaking_not_possible=0x7f04000d;
+        public static final int error_logging_not_possible=0x7f04000b;
+        public static final int error_refreshing_gui_not_possible=0x7f04000c;
+        public static final int error_speaking_not_possible=0x7f04000e;
         /**  Menu 
          */
         public static final int log=0x7f040001;
