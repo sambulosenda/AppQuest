@@ -24,7 +24,12 @@ public class StepManager {
 	{
 		return leftStepInstructions;
 	}
-		
+	
+	public JSONArray getAllStepInstructions()
+	{
+		return allStepInstructions;
+	}
+	
 	public void setNextInstructions() throws JSONException
 	{
 		if(leftStepInstructions.length() > 0)

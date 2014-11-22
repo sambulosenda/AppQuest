@@ -62,6 +62,8 @@ public class Schrittzaehler extends Activity implements StepListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_schrittzaehler);
 
+		setSpeaker();
+		
 		mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
 		mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 		stepCounter = new StepCounter(this);
@@ -70,8 +72,6 @@ public class Schrittzaehler extends Activity implements StepListener {
 		tvSteps = (TextView)findViewById(R.id.tvSteps);
 		imgDirection = (ImageView)findViewById(R.id.ivDirection);
 		imgDirection.setVisibility(View.INVISIBLE);
-
-		setSpeaker();
 	}
 
 	@Override
@@ -148,6 +148,7 @@ public class Schrittzaehler extends Activity implements StepListener {
 		imgDirection.setVisibility(View.INVISIBLE);
 		endstation = 0;
 		startstation = 0;
+		mStepManager = new StepManager(new JSONArray());
 	}
 	
 	public void setStepCounter()
@@ -179,11 +180,9 @@ public class Schrittzaehler extends Activity implements StepListener {
 				tvCommands.setText("make your steps");
 				tvSteps.setText(mStepManager.getStepsLeft() + " steps left");
 				isWalkingOnGoing = true;
-				talkDirtyToMe(String.valueOf(mStepManager.getStepsLeft()));
 			}
 			else
 			{
-				talkDirtyToMe(String.valueOf(mStepManager.getStepsLeft()));
 				tvSteps.setText(getString(R.string.txtSteps));
 			}
 
@@ -209,7 +208,7 @@ public class Schrittzaehler extends Activity implements StepListener {
 				tvCommands.setText("please turn");
 			}
 
-			if(mStepManager.isTourFinished())
+			if(mStepManager.isTourFinished() && mStepManager.getAllStepInstructions().length() > 0)
 			{
 				tvCommands.setText(getString(R.string.response_finished));
 			}
@@ -301,6 +300,12 @@ public class Schrittzaehler extends Activity implements StepListener {
 			if(mStepManager.isAboutToTurn())
 			{
 				mStepManager.makeTurn();
+				
+				if(!mStepManager.isTourFinished())
+				{
+					talkDirtyToMe(String.valueOf("make " + mStepManager.getStepsLeft() + " steps"));
+				}
+				
 			}
 			else
 			{
